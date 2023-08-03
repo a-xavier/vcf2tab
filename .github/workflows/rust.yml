@@ -20,3 +20,5 @@ jobs:
       run: cargo build --verbose
     - name: Find Files
       run: tree
+    - name: Runnit
+      run: ./target/debug/vcf2tab -h
