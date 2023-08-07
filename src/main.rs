@@ -7,7 +7,6 @@ use clap::Parser;
 use std::time::Instant;
 
 fn main() {
-
     // Start time
     let now = Instant::now();
 
@@ -94,6 +93,7 @@ fn main() {
         output_file.write_all(output_separator.as_bytes()).unwrap();
         }
     }
+
     output_file.write_all("\n".as_bytes()).unwrap();
 
     // PROCESS LINES OF TAB FILES

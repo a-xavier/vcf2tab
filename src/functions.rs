@@ -32,6 +32,22 @@ pub fn read_tab_file(filepath: &Path) -> Tabfile{
 }
 
 /// Return a string that is sandwiched between two substrings
+/// # Arguments
+///
+/// * `input_string` - The full string to operate on
+/// * `start_substring` - The substring after which the slice is extracted
+/// * `end_substring` - The substring used to stop / if absent, the function will return everything from `start_substring` to the end of `input_string`
+/// 
+/// # Examples
+/// ``` 
+/// let string_1 = "Bonjour, comment allez vous?";
+/// let string_2 = "comment";
+/// let string_3 = "vous";
+/// 
+/// let return_value = extract_string_between_substrings(string_1, string_2, string_3);
+/// assert!(return_value == " allez ");
+/// ```
+/// 
 pub fn extract_string_between_substrings(input_string: &str, start_substring: &str, end_substring: &str) -> String {
     if let Some(start_index) = input_string.find(start_substring) {
         let rest_of_string = &input_string[start_index + start_substring.len()..];
