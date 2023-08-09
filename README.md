@@ -1,4 +1,6 @@
-# vcf2tab
+# vcf2tab  
+[![Rust](https://github.com/a-xavier/vcf2tab/actions/workflows/rust.yml/badge.svg)](https://github.com/a-xavier/vcf2tab/actions/workflows/rust.yml)  
+
 Transforms a vcf to a table - Expanding the INFO field
 
 ### Instructions  
