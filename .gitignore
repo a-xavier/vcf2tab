@@ -15,3 +15,6 @@ Cargo.lock
 
 # MAC
 .DS_Store
+
+# Toy dataset 
+data/toy.txt

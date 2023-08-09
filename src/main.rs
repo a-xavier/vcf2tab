@@ -13,6 +13,7 @@ fn main() {
     // Constants - ish
     let mut debug: bool = false;
     let mut info_fields: Vec<String> = Vec::new();
+    let mut original_info_fields: Vec<String> = Vec::new();
     let mut header: Vec<String> = Vec::new();
     let default_columns: [&str; 9] = ["#CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT"];
     let default_columns_len: usize = default_columns.len();
@@ -21,6 +22,9 @@ fn main() {
     let mut _counter: i64 = 1;
     // EXPAND THOSE FIELDS IN INFO USING PIPE |
     let mut info_field_to_expend : Vec<String> = Vec::new();
+    let mut size_info_field_to_expend : Vec<usize> = Vec::new();
+
+    
     
     // Parse arguments
     // INPUT and OUTPUT
@@ -34,7 +38,6 @@ fn main() {
 
     let tabfile: Tabfile = functions::read_tab_file(&Path::new(filepath));
 
-
     // TEST HEADER
     if let Ok(lines) = functions::read_lines(filepath) {
         // Consumes the iterator, returns an (Optional) String
@@ -46,13 +49,17 @@ fn main() {
                     if !info_field.is_empty(){
                         if debug{println!("DEBUG INFO FIELDS: {}", info_field);}
                         info_fields.push(info_field.clone());
+                        original_info_fields.push(info_field.clone());
                         if ip.contains("|") {
                             info_field_to_expend.push(info_field);
                             let tmp_string = functions::extract_string_between_substrings(&ip, "Description=\"", "\">");
+                            let mut size_of_field = 0;
                             for item in functions::string_to_vector_by_delimiter(tmp_string, "|"){
                                 if debug{println!("DEBUG INFO FIELDS: {}", &item);}
                                 info_fields.push(item);
+                                size_of_field = size_of_field + 1;
                             }
+                            size_info_field_to_expend.push(size_of_field);
                         }
                     }
                     
@@ -83,6 +90,8 @@ fn main() {
     if debug{
         println!("Fields with pipes to expand:");
         functions::print_vec(&info_field_to_expend);
+        println!("of size");
+        functions::print_vec_int( &size_info_field_to_expend);
     }
 
     // IF ALL GOOD WRITE HEADER
@@ -98,7 +107,7 @@ fn main() {
 
     // PROCESS LINES OF TAB FILES
     println!("Processing full file");
-    let full_information: Vec<Vec<String>> = tabfile.into_iter().map(|x|functions::process_vcf_line(x.unwrap().fields(), &info_fields, _number_of_samples, &info_field_to_expend)).collect();
+    let full_information: Vec<Vec<String>> = tabfile.into_iter().map(|x|functions::process_vcf_line(x.unwrap().fields(), &original_info_fields, _number_of_samples, &info_field_to_expend, &size_info_field_to_expend)).collect();
     println!("Writing {} records.", full_information.len());
     //CONTIUNUE TODO
     let lines: Vec<String> = full_information
@@ -106,8 +115,8 @@ fn main() {
         .map(|vec_strings| vec_strings.join("\t"))
         .collect();
     let content = lines.join("\n");
+    // println!("{}", content);
     let _ = output_file.write_all(content.as_bytes());
-
 
     // END TIME
     let elapsed_time = now.elapsed();

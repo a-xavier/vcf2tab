@@ -21,4 +21,4 @@ jobs:
     - name: Find Files
       run: tree
     - name: Runnit
-      run: ./target/debug/vcf2tab -h
+      run: ./target/debug/vcf2tab -i ./data/toy.vcf -v

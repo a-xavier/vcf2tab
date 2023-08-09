@@ -58,10 +58,11 @@ pub fn extract_string_between_substrings(input_string: &str, start_substring: &s
         } else { // return all the rest if we don't find the end string
             return rest_of_string.to_owned();
         }
-    }
-
+    } else  {
     // If either of the substrings is not found, return empty string (should never happen)
+    //panic!("{} -> {}",input_string, start_substring);
     return String::new()
+    }
 }
 
 /// Parse header in order to get the info fields
@@ -81,29 +82,48 @@ pub fn transform_vec_str_to_vec_string(vec_str: Vec<&str>) -> Vec<String> {
 }
 
 /// Split the vcf line by expending the info field
-pub fn process_vcf_line(line_vec: Vec<&str>, info_fields: &Vec<String>, _number_of_samples: usize, info_field_to_expend: &Vec<String>) -> Vec<String>{
+pub fn process_vcf_line(line_vec: Vec<&str>, info_fields: &Vec<String>, _number_of_samples: usize, info_field_to_expend: &Vec<String>, size_info_field_to_expend: &Vec<usize>) -> Vec<String>{
         // First 7 columns are kept
         let mut new_line: Vec<String> = transform_vec_str_to_vec_string(line_vec[0..7].to_vec());
 
+        // print_vec(info_fields);
+        // println!("{}", info_fields.len());
+
         // Expand info field
         let info_string = line_vec[7];
+
+        //println!("{}", info_fields.len());
+
         // iterate over all fields from INFO
         for field in info_fields.into_iter(){
+            // println!("{}", field);
             // println!("{}", formated_info_field);
             if info_field_to_expend.contains(&field){
-            // If the field is TO BE extended
-            let tmp_str = extract_string_between_substrings(info_string,&format!("{}=", field), ";");
-            let tmp_vec = string_to_vector_by_delimiter(tmp_str, "|");
-                for item in tmp_vec{
-                    new_line.push(item);
-                }   
+                // If the field is TO BE extended
+                let index_of_field = info_field_to_expend.clone().into_iter().position(|r| r == field.to_owned()).unwrap();
+                let size_to_stop = size_info_field_to_expend[index_of_field];
+            
+                let tmp_str = extract_string_between_substrings(info_string,&format!("{}=", field), ";");
+                let tmp_vec = string_to_vector_by_delimiter(tmp_str, "|");
+                let slice = &tmp_vec[0..size_to_stop];
+
+                for item in slice{
+                    new_line.push(item.trim().to_owned());
+                }
             } else {
             // If the field is to NOT be extended
             new_line.push(extract_string_between_substrings(info_string,&format!("{}=", field), ";"));
             }
+            
+            // DEBUG
+            // println!("{}", field);
+            // println!("{}", new_line.len());
         }
         // Get genotype ;
         new_line.extend(transform_vec_str_to_vec_string(line_vec[8..].to_vec()));
+        // print_vec(&new_line);
+        // println!("{}", line_vec[8..].to_vec().len());
+        // println!("{}", new_line.len());
 
         return new_line;
 }
@@ -121,10 +141,17 @@ pub fn string_to_vector_by_delimiter(input_str: String, delimiter: &str) -> Vec<
     return return_value
 }
 
-/// Convenience function to print vectors
-
+/// Convenience function to print vectors string
 pub fn print_vec(vec_to_print: &Vec<String>){
     for item in vec_to_print{
-        println!("{}", item);
+        println!("{:?}", item);
     }
 }
+
+/// Convenience function to print vectors int
+pub fn print_vec_int(vec_to_print: &Vec<usize>){
+    for item in vec_to_print{
+        println!("{:?}", item);
+    }
+}
+
