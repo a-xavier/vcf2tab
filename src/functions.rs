@@ -105,8 +105,7 @@ pub fn process_vcf_line(line_vec: Vec<&str>, info_fields: &Vec<String>, _number_
             
                 let tmp_str = extract_string_between_substrings(info_string,&format!("{}=", field), ";");
                 let tmp_vec = string_to_vector_by_delimiter(tmp_str, "|");
-                let slice = &tmp_vec[0..size_to_stop];
-
+                let slice = &tmp_vec[0..size_to_stop]; // limit to one CSQ per variant
                 for item in slice{
                     new_line.push(item.trim().to_owned());
                 }

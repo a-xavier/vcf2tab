@@ -2,9 +2,17 @@
 name = "vcf2tab"
 version = "0.1.0"
 edition = "2021"
+authors = ["a-xavier"]
+description = "Transforms a vcf (variant call format) file to a tab delimited table for easy reading"
+readme = "README.md"
+repository = "https://github.com/a-xavier/vcf2tab/"
+license = "MIT"
+license-file = "LICENSE"
+keywords = ["vcf", "tab", "genomics", "genetics", "file", "manipulation"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 tabfile = "0.2.1"
 clap = { version =  "4.3.19", features = ["derive"] }
+rayon = "1.7"

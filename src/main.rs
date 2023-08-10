@@ -1,11 +1,16 @@
+// Import own internal functions
 mod functions;
+// Standard library
 use std::fs::File;
-use tabfile::Tabfile;
 use std::path::Path;
 use std::io::Write;
-use clap::Parser;
 use std::time::Instant;
+// External Crates
+use clap::Parser;
+use tabfile::Tabfile;
+use rayon::prelude::*;
 
+/// vcf2tab will transform a vcf into a tab separated table for easy downstream uses
 fn main() {
     // Start time
     let now = Instant::now();
@@ -107,11 +112,12 @@ fn main() {
 
     // PROCESS LINES OF TAB FILES
     println!("Processing full file");
-    let full_information: Vec<Vec<String>> = tabfile.into_iter().map(|x|functions::process_vcf_line(x.unwrap().fields(), &original_info_fields, _number_of_samples, &info_field_to_expend, &size_info_field_to_expend)).collect();
+    let full_information: Vec<Vec<String>> = tabfile.into_iter().par_bridge().map(|x|functions::process_vcf_line(x.unwrap().fields(), &original_info_fields, _number_of_samples, &info_field_to_expend, &size_info_field_to_expend)).collect();
     println!("Writing {} records.", full_information.len());
     //CONTIUNUE TODO
     let lines: Vec<String> = full_information
-        .iter()
+        //.iter()
+        .iter() // try rayon for multithreading
         .map(|vec_strings| vec_strings.join("\t"))
         .collect();
     let content = lines.join("\n");
