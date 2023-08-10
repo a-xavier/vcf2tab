@@ -113,7 +113,7 @@ fn main() {
     // PROCESS LINES OF TAB FILES
     println!("Processing full file");
     let full_information: Vec<Vec<String>> = tabfile.into_iter().par_bridge().map(|x|functions::process_vcf_line(x.unwrap().fields(), &original_info_fields, _number_of_samples, &info_field_to_expend, &size_info_field_to_expend)).collect();
-    println!("Writing {} records.", full_information.len());
+    println!("Writing {} records.", functions::pretty_print_int(full_information.len()));
     //CONTIUNUE TODO
     let lines: Vec<String> = full_information
         //.iter()
@@ -126,5 +126,6 @@ fn main() {
 
     // END TIME
     let elapsed_time = now.elapsed();
+    
     println!("Done in {}s", elapsed_time.as_secs())
 }
