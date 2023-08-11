@@ -10,11 +10,12 @@ Transforms a vcf to a table - Expanding the INFO field
 ```git clone https://github.com/a-xavier/vcf2tab```  
 ```cd vcf2tab```  
 ```cargo build --release```  
+The resulting binary will be located in ```./vcf2tab/target/release/vcf2tab```  
+You might need to flag the file as executable with ```chmod +x ./vcf2tab```  
 
 ### Usage
 Only one argument needed  
-```-i VCF_FILE``` the vcf file to transform  
+```-i VCF_FILE.vcf``` the vcf file to transform  
 
-The resulting binary will be located in ```./vcf2tab/target/release/vcf2tab```  
-You might need to flag the file as executable with ```chmod +x ./vcf2tab```  
+The resulting tab-delimited file will be called ```VCF_FILE.txt``` and will be located in the same directory as the input file.
 
