@@ -9,6 +9,7 @@ repository = "https://github.com/a-xavier/vcf2tab/"
 license = "MIT"
 license-file = "LICENSE"
 keywords = ["vcf", "tab", "genomics", "genetics", "file", "manipulation"]
+categories = ["science"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

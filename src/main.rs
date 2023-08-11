@@ -37,8 +37,13 @@ fn main() {
 
     // PARSE ARGUMENTS
     let filepath = cli.input.as_deref().unwrap();
+
+    if filepath.exists() == false {panic!("Input file does not exists")};
+
     let output_path: String = filepath.to_owned().into_os_string().into_string().unwrap().replace(".vcf", ".txt");
+
     let mut output_file: File = File::create(output_path).expect("Could Not Create Output File");
+
     if cli.verbose == true {debug = true} else {debug = false};
 
     let tabfile: Tabfile = functions::read_tab_file(&Path::new(filepath));
@@ -126,6 +131,6 @@ fn main() {
 
     // END TIME
     let elapsed_time = now.elapsed();
-    
+
     println!("Done in {}s", elapsed_time.as_secs())
 }
