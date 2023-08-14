@@ -15,11 +15,13 @@ pub struct Cli {
     #[arg(short, long, required = true, value_name = "FILE")]
     pub input: Option<PathBuf>,
 
+    #[arg(short, long, required = false, value_name = "FILE")]
+    pub output: Option<PathBuf>,
+
     /// Turn debugging information on
     #[arg(short, long, action = clap::ArgAction::SetTrue)]
     pub verbose: bool,
 }
-
 
 /// Wrap a function to open a Tabfile from a path
 pub fn read_tab_file(filepath: &Path) -> Tabfile{

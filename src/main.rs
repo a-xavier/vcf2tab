@@ -40,7 +40,14 @@ fn main() {
 
     if filepath.exists() == false {panic!("Input file does not exists")};
 
-    let output_path: String = filepath.to_owned().into_os_string().into_string().unwrap().replace(".vcf", ".txt");
+    let mut output_path: String;
+
+    // output path
+    if cli.output == None {
+        output_path = filepath.to_owned().into_os_string().into_string().unwrap().replace(".vcf", ".txt");
+    } else {
+        output_path = cli.output.unwrap().into_os_string().into_string().unwrap();
+    }
 
     let mut output_file: File = File::create(output_path).expect("Could Not Create Output File");
 
