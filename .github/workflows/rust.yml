@@ -23,4 +23,4 @@ jobs:
     - name: Runnit
       run: ./target/debug/vcf2tab -i ./data/toy.vcf -v
     - name: PrintIT
-      run: cat ./data/toy.vcf -v | head -n 10
+      run: cat ./data/toy.txt
