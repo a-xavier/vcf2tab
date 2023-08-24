@@ -121,7 +121,29 @@ pub fn process_vcf_line(line_vec: Vec<&str>, info_fields: &Vec<String>, _number_
             // println!("{}", new_line.len());
         }
         // Get genotype ;
-        new_line.extend(transform_vec_str_to_vec_string(line_vec[8..].to_vec()));
+        new_line.push(line_vec[8].to_owned()); // ADD THE GT FIELD EVEN THOUG IT'S NOT NECESSARY
+        // new_line.extend(transform_vec_str_to_vec_string(line_vec[8..].to_vec()));
+
+        // Make 0 1 2 -9 genotype
+        let new_simple_genotype: Vec<String> = line_vec[9..].to_vec().
+        iter()
+        .map(|x| {
+            let mut number_of_alt = 0;
+            let genotype_raw: Vec<char> = x[..3].chars().collect();
+            let first_allele = genotype_raw.get(0).unwrap();
+            let second_allele = genotype_raw.get(2).unwrap();
+            if first_allele == &'1' {number_of_alt+=1};
+            if second_allele == &'1' {number_of_alt+=1};
+            if first_allele == &'.' || second_allele == &'.' {number_of_alt = -9};
+            let str_alt = number_of_alt.to_string();
+            return str_alt;
+        })
+        .collect();
+
+        new_line.extend(new_simple_genotype);
+
+        // Process genotype
+
         // print_vec(&new_line);
         // println!("{}", line_vec[8..].to_vec().len());
         // println!("{}", new_line.len());
